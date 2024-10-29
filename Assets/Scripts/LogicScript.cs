@@ -8,14 +8,29 @@ using UnityEngine.SceneManagement;
 public class LogicScript : MonoBehaviour
 {
     public int playerScore;
-    public TextMeshProUGUI scoreText;
+    public int highScore;
+    public TextMeshProUGUI scorePts;
+    public TextMeshProUGUI highScorePts;
     public GameObject gameOverScreen;
 
     [ContextMenu("Increase Score")]
+
+    private void Start()
+    {
+        highScorePts.text = PlayerPrefs.GetInt("HighScore").ToString();
+        highScore = PlayerPrefs.GetInt("HighScore");
+    }
+
+
     public void addScore()
     {
-        playerScore += 1;
-        scoreText.text = playerScore.ToString();
+        playerScore++;
+        if(playerScore > highScore)
+        {
+            highScore++;
+            highScorePts.text = highScore.ToString();
+        }
+        scorePts.text = playerScore.ToString();
     }
 
     public void restartGame()
@@ -25,6 +40,9 @@ public class LogicScript : MonoBehaviour
 
     public void gameOver()
     {
+        if (playerScore > PlayerPrefs.GetInt("HighScore"))
+        PlayerPrefs.SetInt("HighScore", highScore);
+
         gameOverScreen.SetActive(true);
     }
 
